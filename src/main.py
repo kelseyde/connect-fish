@@ -1,4 +1,5 @@
 from board.board import Board
+import random
 
 running = True
 
@@ -9,7 +10,7 @@ def play_game():
 
     player = 1
     while running:
-        col = int(input())
+        col = int(input()) if player == 1 else random_move(board)
         if col < 0 or col > 6:
             print("Invalid column")
             continue
@@ -26,6 +27,11 @@ def play_game():
             break
 
         player = 2 if player == 1 else 1
+
+
+def random_move(board):
+    moves = board.generate_moves()
+    return random.choice(moves)
 
 
 while running:
