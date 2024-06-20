@@ -10,7 +10,7 @@ class Board:
         0  7 14 21 28 35 42
 
     This representation allows us to quickly compute the bit index for a given row and column: index = row * 7 + col.
-    It also allows us to check for four-in-a-row shifting the bitboard by 1, 7, 6, and 8 bits in each direction.
+    It also allows us to check for four-in-a-row by shifting the bitboard by 1, 7, 6, and 8 bits in each direction.
     """
 
     def __init__(self):
@@ -36,6 +36,7 @@ class Board:
         index = self.get_free_index(col)
         if index != -1:
             move_mask = 1 << index
+            # Add the move to the occupied board and the player board.
             self.boards[0] |= move_mask
             self.boards[self.player] |= move_mask
             self.move_history.append(col)
@@ -53,6 +54,7 @@ class Board:
             if index != -1:
                 self.player = 1 if self.player == 2 else 2
                 move_mask = 1 << index
+                # Remove the move from the occupied board and the player board.
                 self.boards[0] &= ~move_mask
                 self.boards[self.player] &= ~move_mask
                 return True
@@ -65,6 +67,7 @@ class Board:
         moves = []
         for col in range(7):
             if self.get_free_index(col) != -1:
+                # If the column has a free tile, add it to the list of legal moves.
                 moves.append(col)
         return moves
 
@@ -72,10 +75,16 @@ class Board:
         """
         Check if the current board has four-in-a-row; return the winning player or 0 if there is no winner.
         """
-        if self.is_won(1):
-            return 1
-        elif self.is_won(2):
-            return 2
+
+        # Always check the player who has just moved first, as this method is likely to be called just after make_move,
+        # and therefore the player who has just moved is the most likely to have won.
+        us = 1 if self.player == 2 else 2
+        them = 2 if self.player == 2 else 1
+
+        if self.is_won(us):
+            return us
+        elif self.is_won(them):
+            return them
         return 0
 
     def is_won(self, player):
