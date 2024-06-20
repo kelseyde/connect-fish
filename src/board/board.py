@@ -1,5 +1,4 @@
 class Board:
-
     """
     The 6x7 Connect 4 board is represented as a bitboard in the following format:
 
@@ -10,7 +9,8 @@ class Board:
         1  8 15 22 29 36 43
         0  7 14 21 28 35 42
 
-    This representation allows us to quickly compute the bit index for a given row + column: index = row * 7 + col.
+    This representation allows us to quickly compute the bit index for a given row and column: index = row * 7 + col.
+    It also allows us to check for four-in-a-row shifting the bitboard by 1, 7, 6, and 8 bits in each direction.
     """
 
     def __init__(self):
@@ -68,6 +68,36 @@ class Board:
                 moves.append(col)
         return moves
 
+    def get_winner(self):
+        """
+        Check if the current board has four-in-a-row; return the winning player or 0 if there is no winner.
+        """
+        if self.is_won(1):
+            return 1
+        elif self.is_won(2):
+            return 2
+        return 0
+
+    def is_won(self, player):
+        """
+        Check if the specified player has four-in-a-row on the board.
+        Given our board representation the directions to check for four-in-a-row are:
+            - Horizontal: 1
+            - Vertical: 7
+            - Diagonal (top-left to bottom-right): 6
+            - Diagonal (top-right to bottom-left): 8
+        We shift the bitboard in each direction three times and check if the result is not zero.
+        If not zero, then the player has four-in-a-row.
+        """
+        bb = self.boards[player]
+        directions = [1, 7, 6, 8]
+        for direction in directions:
+            if ((bb & (bb >> direction)) &
+                    (bb >> (2 * direction)) &
+                    (bb >> (3 * direction))):
+                return True
+        return False
+
     def get_free_index(self, col):
         """
         Get the bit index of the next free position in the specified column, or return -1 if the column is full.
@@ -85,7 +115,7 @@ class Board:
         """
         for row in range(5, -1, -1):
             pos = row * 7 + col
-            # Check if the position is empty
+            # Check if the position is occupied
             if self.boards[0] & (1 << pos):
                 return pos
         return -1
