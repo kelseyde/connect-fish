@@ -3,7 +3,7 @@ def evaluate(board):
     Simple evaluation function placeholder until we implement neural networks:
     If one side has four-in-a-row, return a score of 1 million.
     Otherwise, count the number of two-in-a-rows and three-in-a-rows for each player, multiplied by a bonus of 1000 for
-    three-in-a-rows and 500 for two-in-a-rows, and return the difference.
+    three-in-a-rows and 200 for two-in-a-rows, and return the difference.
     """
     four_in_a_row_score = 1000000
     three_in_a_row_score = 1000

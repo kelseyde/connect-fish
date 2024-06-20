@@ -28,11 +28,11 @@ class SearchTest(unittest.TestCase):
         search = Search()
 
         board.make_move(3)
-        board.make_move(3)
-        board.make_move(4)
+        board.make_move(5)
+        board.make_move(2)
 
-        # Search must recognize that it needs to play in column 2 or 5 to prevent connect 4...
+        # Search must recognize that it needs to play in column 1 or 4 to prevent connect 4...
 
         move = search.search(board, 3)
 
-        self.assertIn(move, [2, 5])
+        self.assertIn(move, [1, 4])
