@@ -51,10 +51,10 @@ class Board:
             last_col = self.move_history.pop()
             index = self.get_occupied_index(last_col)
             if index != -1:
-                self.player = 1 if self.player == 2 else 2  # Switch player turn back
+                self.player = 1 if self.player == 2 else 2
                 move_mask = 1 << index
-                self.boards[0] &= ~move_mask  # Clear the bit in the occupied tiles board
-                self.boards[self.player] &= ~move_mask  # Clear the bit in the player's occupied tiles
+                self.boards[0] &= ~move_mask
+                self.boards[self.player] &= ~move_mask
                 return True
         return False
 
