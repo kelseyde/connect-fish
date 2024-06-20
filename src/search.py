@@ -9,7 +9,7 @@ class Search:
         self.max_depth = 42
         self.best_move = -1
         self.best_move_current_depth = -1
-        self.timeout = None
+        self.timeout = -1
 
     def search(self, board, seconds):
         """
@@ -29,7 +29,7 @@ class Search:
 
             print(f"Searching to depth {current_depth}")
 
-            # Reset the best move at the current depth to None.
+            # Reset the best move at the current depth.
             self.best_move_current_depth = -1
 
             # Start a search limited to the current depth.
