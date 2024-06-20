@@ -10,12 +10,14 @@ def play_game():
 
     player = 1
     while running:
+
         col = int(input()) if player == 1 else random_move(board)
         if col < 0 or col > 6:
             print("Invalid column")
             continue
 
-        if not board.make_move(col):
+        result = board.make_move(col)
+        if not result:
             print("Column is full")
             continue
 
