@@ -77,17 +77,26 @@ class BoardTest(unittest.TestCase):
 
     def test_generate_moves_partially_full_board(self):
         board = Board()
-        for _ in range(6):
-            board.make_move(0)
-            board.make_move(1)
-            if _ % 2 == 0:
-                # leave column 2 partially filled
-                board.make_move(2)
-            board.make_move(3)
-            board.make_move(4)
-            board.make_move(5)
-            # leave column 6 empty
-        self.assertEqual([2, 6], board.generate_moves())
+        # Fill column 0 completely
+        board.make_move(0)
+        board.make_move(0)
+        board.make_move(0)
+        board.make_move(0)
+        board.make_move(0)
+        board.make_move(0)
+        # Fill column 3 partially
+        board.make_move(3)
+        board.make_move(3)
+        board.make_move(3)
+        # Fill column 6 completely
+        board.make_move(6)
+        board.make_move(6)
+        board.make_move(6)
+        board.make_move(6)
+        board.make_move(6)
+        board.make_move(6)
+        board.print_board()
+        self.assertEqual([1, 2, 3, 4, 5], board.generate_moves())
 
     def test_four_in_a_row_vertical(self):
         board = Board()
@@ -179,5 +188,3 @@ class BoardTest(unittest.TestCase):
         board.make_move(4)
 
         self.assertEqual(0, board.get_winner())
-
-

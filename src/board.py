@@ -98,16 +98,16 @@ class Board:
             - Diagonal (top-left to bottom-right): 6
             - Diagonal (top-right to bottom-left): 8
         We shift the bitboard in each direction three times and check if the result is not zero.
-        The unused bits on the right side of each row are important, as they prevent the bitboard from wrapping around
-        to the left side of the board, which would cause false positives.
+        The unused bits on the right side of each row are important, as they prevent the bitboard
+        from wrapping around to the left side of the board, which would cause false positives.
         If not zero, then the player has four-in-a-row.
         """
         bb = self.boards[player]
         directions = [1, 7, 6, 8]
         for direction in directions:
             if (bb & (bb >> direction)) & \
-                    (bb >> (2 * direction)) & \
-                    (bb >> (3 * direction)):
+                    bb & (bb >> 2 * direction) & \
+                    bb & (bb >> 3 * direction):
                 return True
         return False
 
