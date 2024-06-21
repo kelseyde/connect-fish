@@ -9,7 +9,7 @@ class Board:
         1  8 15 22 29 36 43
         0  7 14 21 28 35 42
 
-    This representation allows us to quickly compute the bit index for a given row and column: index = row * 7 + col.
+    This representation allows us to quickly compute the bit index for a given row and column: index = col * 7 + row.
     It also allows us to check for four-in-a-row by shifting the bitboard by 1, 7, 6, and 8 bits in each direction.
     """
 
@@ -65,6 +65,8 @@ class Board:
         Generate all legal moves for the current board state.
         """
         moves = []
+        if self.get_winner() != 0:
+            return moves
         for col in range(7):
             if self.get_free_index(col) != -1:
                 # If the column has a free tile, add it to the list of legal moves.
@@ -103,9 +105,9 @@ class Board:
         bb = self.boards[player]
         directions = [1, 7, 6, 8]
         for direction in directions:
-            if ((bb & (bb >> direction)) &
-                    (bb >> (2 * direction)) &
-                    (bb >> (3 * direction))):
+            if (bb & (bb >> direction)) & \
+                    (bb >> (2 * direction)) & \
+                    (bb >> (3 * direction)):
                 return True
         return False
 
@@ -114,7 +116,7 @@ class Board:
         Get the bit index of the next free position in the specified column, or return -1 if the column is full.
         """
         for row in range(6):
-            pos = row * 7 + col
+            pos = self.get_index(row, col)
             # Check if the position is empty
             if not self.boards[0] & (1 << pos):
                 return pos
@@ -125,7 +127,7 @@ class Board:
         Get the bit index of the highest occupied position in the specified column, or return -1 if the column is empty.
         """
         for row in range(5, -1, -1):
-            pos = row * 7 + col
+            pos = self.get_index(row, col)
             # Check if the position is occupied
             if self.boards[0] & (1 << pos):
                 return pos
@@ -135,14 +137,20 @@ class Board:
         """
         Get the player occupying the specified position.
         """
-        pos = row * 7 + col
+        pos = self.get_index(row, col)
         if self.boards[1] & (1 << pos):
             return 1
         elif self.boards[2] & (1 << pos):
             return 2
         return 0
 
-    def print(self):
+    def get_index(self, row, col):
+        """
+        Get the bit index of the specified position.
+        """
+        return col * 7 + row
+
+    def print_board(self):
         """
         Display the board with colors: player 1 (red) and player 2 (yellow).
         """
@@ -153,7 +161,7 @@ class Board:
         board_str = ""
         for row in range(5, -1, -1):
             for col in range(7):
-                pos = row * 7 + col
+                pos = self.get_index(row, col)
                 if self.boards[1] & (1 << pos):
                     board_str += red + " "
                 elif self.boards[2] & (1 << pos):
