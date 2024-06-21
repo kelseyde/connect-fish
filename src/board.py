@@ -106,8 +106,8 @@ class Board:
         directions = [1, 7, 6, 8]
         for direction in directions:
             if (bb & (bb >> direction)) & \
-                    bb & (bb >> 2 * direction) & \
-                    bb & (bb >> 3 * direction):
+                     (bb >> 2 * direction) & \
+                     (bb >> 3 * direction):
                 return True
         return False
 
