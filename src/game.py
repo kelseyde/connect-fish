@@ -10,7 +10,7 @@ def play_game():
     player = 1
     while True:
 
-        col = int(input()) if player == 1 else search.search(board, 5)
+        col = int(input()) if player == 1 else search.search(board, 3)
         if col < 0 or col > 6:
             print("Invalid column")
             continue
