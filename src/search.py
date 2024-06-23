@@ -25,7 +25,7 @@ class Search:
         self.best_move_current_depth = -1
 
         # Keep searching to greater depths until we run out of time.
-        while time() < self.timeout:
+        while time() < self.timeout and current_depth < self.max_depth:
 
             print(f"Searching to depth {current_depth}")
 
