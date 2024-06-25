@@ -174,3 +174,6 @@ class Board:
         board_str += "0 1 2 3 4 5 6\n"
 
         print(board_str)
+
+    def get_boards(self):
+        return(self.boards)

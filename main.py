@@ -10,6 +10,12 @@ while running:
         case "newgame":
             play_game()
         case "selfplay":
-            self_play()
+            print("Select mode: 'demo' or 'gendat'")
+            command = input()
+            assert(command in ['gendat', 'demo'], "Error: Unknown command")
+            self_play(command)
         case "quit":
             running = False
+        case _:
+            raise TypeError("Unknown command")
+
