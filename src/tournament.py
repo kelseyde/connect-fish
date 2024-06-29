@@ -1,6 +1,7 @@
 from src import game
 import src.search as simple_search
 
+
 def run(player_1, player_2, num_games=100, think_time_s=1):
     p1_wins = 0
     p2_wins = 0
