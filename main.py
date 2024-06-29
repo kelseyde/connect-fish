@@ -8,7 +8,7 @@ while running:
     command = input()
     match command:
         case "newgame":
-            play_game()
+            play_game(random_opening=False)
         case "selfplay":
             self_play()
         case "quit":

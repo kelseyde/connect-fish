@@ -11,14 +11,15 @@ class Search:
         self.best_move_current_depth = -1
         self.timeout = -1
 
-    def search(self, board, seconds):
+    def search(self, board, seconds, debug=False):
         """
         Do an iterative deepening search: search to depth 1, then 2, then 3, and so on, until time runs out.
         """
 
         start = time()
         self.timeout = start + seconds
-        print(f"Searching for {seconds} seconds, timeout at {strftime('%Y-%m-%d %H:%M:%S', localtime(self.timeout))}")
+        if debug:
+            print(f"Searching for {seconds} seconds, timeout at {strftime('%Y-%m-%d %H:%M:%S', localtime(self.timeout))}")
 
         current_depth = 1
         self.best_move = -1
@@ -27,7 +28,8 @@ class Search:
         # Keep searching to greater depths until we run out of time.
         while time() < self.timeout and current_depth < self.max_depth:
 
-            print(f"Searching to depth {current_depth}")
+            if debug:
+                print(f"Searching to depth {current_depth}")
 
             # Reset the best move at the current depth.
             self.best_move_current_depth = -1
