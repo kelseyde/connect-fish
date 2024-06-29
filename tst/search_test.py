@@ -51,8 +51,6 @@ class SearchTest(unittest.TestCase):
         board.make_move(1)
         board.print_board()
 
-        # Search must recognize that it needs to play in column 1 or 4 to prevent connect 4...
-
         search.timeout = time.time() + 1000000000
 
         score = search.search_to_depth(board, 0, 2, debug=False)
