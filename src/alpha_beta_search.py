@@ -2,6 +2,9 @@ from src.eval import evaluate
 from time import time, strftime, localtime
 import random
 
+MAX_VALUE = float('inf')
+MIN_VALUE = -float('inf')
+
 
 class Search:
 
@@ -31,11 +34,14 @@ class Search:
             if debug:
                 print(f"Searching to depth {current_depth}")
 
+            alpha = MIN_VALUE
+            beta = MAX_VALUE
+
             # Reset the best move at the current depth.
             self.best_move_current_depth = -1
 
             # Start a search limited to the current depth.
-            self.search_to_depth(board, 0, current_depth, debug=debug)
+            self.search_to_depth(board, 0, current_depth, alpha, beta, debug=debug)
 
             # If we completed the search, update the best move.
             if self.best_move_current_depth >= 0:
@@ -48,7 +54,7 @@ class Search:
 
         return self.best_move
 
-    def search_to_depth(self, board, depth_from_root, depth_remaining, debug=False):
+    def search_to_depth(self, board, depth_from_root, depth_remaining, alpha, beta, debug=False):
         """
         Do a minimax search: find the move that maximises our score, limited to a certain depth.
         """
@@ -62,34 +68,33 @@ class Search:
 
         # If there are no legal moves - or if we reach the maximum search depth - evaluate the position
         if len(moves) == 0 or depth_remaining == 0:
-            score = evaluate(board)
-            # if debug:
-            #     print(f"Move history: {board.move_history}, Score: {score}")
             return evaluate(board)
-
-        # Initialise the best score as negative infinity - any move whose score beats this becomes our new best move.
-        best_score = -float('inf')
 
         # Loop through all the legal moves.
         for move in moves:
 
             # Make the move on the board, search the resulting position, and then unmake the move.
             board.make_move(move)
-            score = -self.search_to_depth(board, depth_from_root + 1, depth_remaining - 1, debug=debug)
+            score = -self.search_to_depth(board, depth_from_root + 1, depth_remaining - 1, -beta, -alpha, debug=debug)
             board.unmake_move()
 
-            if depth_from_root == 0 and debug:
-                print(f"Move {move}: {score}")
+            # If score >= beta, this position is 'too good' - the opponent won't let us get here
+            # as they have better options earlier in the search tree. Therefore, there's no point
+            # searching any further down this branch.
+            if score >= beta:
+                board.print_board()
+                print(f"Pruning move {move} at depth {depth_from_root}")
+                return score
 
             # If the score is better than our current best score, update the best score.
-            if score > best_score:
-                best_score = score
+            if score > alpha:
+                alpha = score
 
                 # If we are at the root of the search tree, update the best move.
                 if depth_from_root == 0:
                     self.best_move_current_depth = move
 
-        return best_score
+        return alpha
 
     def random_move(self, board):
         moves = board.generate_moves()

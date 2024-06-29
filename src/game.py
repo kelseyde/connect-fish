@@ -2,15 +2,22 @@ from src.board import Board
 from src.search import Search
 import random
 
-def play_game():
+
+def play_game(random_opening=False):
     board = Board()
     search = Search()
+
+    if random_opening:
+        for _ in range(random.choice(range(6))):
+            col = random.choice(range(7))
+            board.make_move(col)
+
     board.print_board()
 
     player = 1
     while True:
 
-        col = int(input()) if player == 1 else search.search(board, 3)
+        col = int(input()) if player == 1 else search.search(board, 3, debug=True)
         if col < 0 or col > 6:
             print("Invalid column")
             continue
@@ -29,9 +36,60 @@ def play_game():
 
         player = 2 if player == 1 else 1
 
+
+def play_multiplayer_game(player_1, player_2, think_time_s, debug=False):
+    board = Board()
+
+    for _ in range(random.choice([2, 4, 6])):
+        col = random.choice(range(7))
+        board.make_move(col)
+
+    if debug:
+        board.print_board()
+    result = 0
+
+    starting_player_id = random.choice([1, 2])
+    starting_player = player_1 if starting_player_id == 1 else player_2
+
+    current_player_id = starting_player_id
+    current_player = starting_player
+
+    while True:
+
+        if len(board.generate_moves()) == 0:
+            result = 0
+            break
+
+        col = current_player.search(board, think_time_s)
+        if col < 0 or col > 6:
+            print("Invalid column")
+            continue
+
+        result = board.make_move(col)
+        if not result:
+            print("Column is full")
+            continue
+
+        if debug:
+            board.print_board()
+
+        outcome = board.get_winner()
+        if outcome != 0:
+            result = current_player_id
+            if debug:
+                print(f"Player {result} wins!")
+            break
+
+        current_player = player_1 if current_player == player_2 else player_2
+        current_player_id = 2 if current_player_id == 1 else 1
+
+    return result
+
+
 def self_play():
     while True:
         self_play_single()
+
 
 def self_play_single():
     board = Board()
@@ -46,7 +104,7 @@ def self_play_single():
 
     while True:
 
-        col =  search.search(board, 0.5)
+        col = search.search(board, 0.5)
         if col < 0 or col > 6:
             print("Invalid column")
             continue

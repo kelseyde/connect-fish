@@ -1,3 +1,9 @@
+
+FOUR_IN_A_ROW_SCORE = 1000000
+THREE_IN_A_ROW_SCORE = 1000
+TWO_IN_A_ROW_SCORE = 200
+
+
 def evaluate(board):
     """
     Simple evaluation function placeholder until we implement neural networks:
@@ -5,13 +11,10 @@ def evaluate(board):
     Otherwise, count the number of two-in-a-rows and three-in-a-rows for each player, multiplied by a bonus of 1000 for
     three-in-a-rows and 200 for two-in-a-rows, and return the difference.
     """
-    four_in_a_row_score = 1000000
-    three_in_a_row_score = 1000
-    two_in_a_row_score = 200
 
     winner = board.get_winner()
     if winner != 0:
-        return four_in_a_row_score if winner == board.player else -four_in_a_row_score
+        return FOUR_IN_A_ROW_SCORE if winner == board.player else -FOUR_IN_A_ROW_SCORE
 
     player_1_twos = count_two_in_a_row(board, 1)
     player_1_threes = count_three_in_a_row(board, 1)
@@ -19,8 +22,8 @@ def evaluate(board):
     player_2_twos = count_two_in_a_row(board, 2)
     player_2_threes = count_three_in_a_row(board, 2)
 
-    player_1_score = (player_1_twos * two_in_a_row_score) + (player_1_threes * three_in_a_row_score)
-    player_2_score = (player_2_twos * two_in_a_row_score) + (player_2_threes * three_in_a_row_score)
+    player_1_score = (player_1_twos * TWO_IN_A_ROW_SCORE) + (player_1_threes * THREE_IN_A_ROW_SCORE)
+    player_2_score = (player_2_twos * TWO_IN_A_ROW_SCORE) + (player_2_threes * THREE_IN_A_ROW_SCORE)
     score = player_1_score - player_2_score
 
     return score if board.player == 1 else -score
