@@ -1,5 +1,5 @@
 from src.board import Board
-from src.search import Search
+from src.search.search import Search
 import random
 
 
@@ -37,14 +37,15 @@ def play_game(random_opening=False):
         player = 2 if player == 1 else 1
 
 
-def play_multiplayer_game(player_1, player_2, think_time_s):
+def play_multiplayer_game(player_1, player_2, think_time_s, debug=False):
     board = Board()
 
     for _ in range(random.choice([2, 4, 6])):
         col = random.choice(range(7))
         board.make_move(col)
 
-    board.print_board()
+    if debug:
+        board.print_board()
     result = 0
 
     starting_player_id = random.choice([1, 2])
@@ -54,6 +55,10 @@ def play_multiplayer_game(player_1, player_2, think_time_s):
     current_player = starting_player
 
     while True:
+
+        if len(board.generate_moves()) == 0:
+            result = 0
+            break
 
         col = current_player.search(board, think_time_s)
         if col < 0 or col > 6:
@@ -65,12 +70,14 @@ def play_multiplayer_game(player_1, player_2, think_time_s):
             print("Column is full")
             continue
 
-        board.print_board()
+        if debug:
+            board.print_board()
 
         outcome = board.get_winner()
         if outcome != 0:
             result = current_player_id
-            print(f"Player {result} wins!")
+            if debug:
+                print(f"Player {result} wins!")
             break
 
         current_player = player_1 if current_player == player_2 else player_2

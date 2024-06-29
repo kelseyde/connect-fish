@@ -35,7 +35,7 @@ class Search:
             self.best_move_current_depth = -1
 
             # Start a search limited to the current depth.
-            self.search_to_depth(board, 0, current_depth)
+            self.search_to_depth(board, 0, current_depth, debug=debug)
 
             # If we completed the search, update the best move.
             if self.best_move_current_depth >= 0:
@@ -48,7 +48,7 @@ class Search:
 
         return self.best_move
 
-    def search_to_depth(self, board, depth_from_root, depth_remaining):
+    def search_to_depth(self, board, depth_from_root, depth_remaining, debug=False):
         """
         Do a minimax search: find the move that maximises our score, limited to a certain depth.
         """
@@ -62,6 +62,9 @@ class Search:
 
         # If there are no legal moves - or if we reach the maximum search depth - evaluate the position
         if len(moves) == 0 or depth_remaining == 0:
+            score = evaluate(board)
+            # if debug:
+            #     print(f"Move history: {board.move_history}, Score: {score}")
             return evaluate(board)
 
         # Initialise the best score as negative infinity - any move whose score beats this becomes our new best move.
@@ -72,8 +75,11 @@ class Search:
 
             # Make the move on the board, search the resulting position, and then unmake the move.
             board.make_move(move)
-            score = -self.search_to_depth(board, depth_from_root + 1, depth_remaining - 1)
+            score = -self.search_to_depth(board, depth_from_root + 1, depth_remaining - 1, debug=debug)
             board.unmake_move()
+
+            if depth_from_root == 0 and debug:
+                print(f"Move {move}: {score}")
 
             # If the score is better than our current best score, update the best score.
             if score > best_score:
@@ -87,4 +93,7 @@ class Search:
 
     def random_move(self, board):
         moves = board.generate_moves()
-        return random.choice(moves)
+        if len(moves) == 0:
+            return -1
+        else:
+            return random.choice(moves)

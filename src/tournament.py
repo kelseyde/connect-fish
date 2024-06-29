@@ -1,4 +1,6 @@
 from src import game
+import src.search.search as simple_search
+import src.search.alpha_beta_search as alpha_beta_search
 
 
 def run(player_1, player_2, num_games=100, think_time_s=1):
@@ -14,7 +16,14 @@ def run(player_1, player_2, num_games=100, think_time_s=1):
         elif result == 0:
             draws += 1
         print(f"Score after game {i + 1}: p1 wins {p1_wins}, p2 wins {p2_wins}, draws {draws}")
-    print(f"Final score: p1 wins {p1_wins}, p2 wins {p2_wins}, draws {draws}")
+
+    print("Tournament complete.")
+    print("Player 1 wins: ", p1_wins)
+    print("Player 2 wins: ", p2_wins)
+    print("Draws: ", draws)
 
 
-run(game.Search(), game.Search(), num_games=1000, think_time_s=0.2)
+player_1 = simple_search.Search()
+player_2 = alpha_beta_search.Search()
+
+run(player_1, player_2, num_games=100, think_time_s=0.2)
