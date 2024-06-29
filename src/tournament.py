@@ -1,7 +1,5 @@
 from src import game
 import src.search as simple_search
-import src.alpha_beta_search as alpha_beta_search
-
 
 def run(player_1, player_2, num_games=100, think_time_s=1):
     p1_wins = 0
@@ -24,6 +22,6 @@ def run(player_1, player_2, num_games=100, think_time_s=1):
 
 
 player_1 = simple_search.Search()
-player_2 = alpha_beta_search.Search()
+player_2 = simple_search.Search()
 
 run(player_1, player_2, num_games=100, think_time_s=0.2)
