@@ -1,6 +1,6 @@
 from src import game
-import src.search.search as simple_search
-import src.search.alpha_beta_search as alpha_beta_search
+import src.search as simple_search
+import src.alpha_beta_search as alpha_beta_search
 
 
 def run(player_1, player_2, num_games=100, think_time_s=1):

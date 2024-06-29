@@ -1,7 +1,7 @@
 import time
 import unittest
 from src.board import Board
-from src.search.search import Search
+from src.search import Search
 import src.eval as eval
 
 

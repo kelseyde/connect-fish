@@ -1,3 +1,8 @@
+import random
+
+ZOBRIST_HASH = [[random.getrandbits(64) for _ in range(7)] for _ in range(3)]
+
+
 class Board:
     """
     The 6x7 Connect 4 board is represented as a bitboard in the following format:
@@ -28,6 +33,7 @@ class Board:
 
         # Record the move history.
         self.move_history = []
+        self.zobrist_key = 0
 
     def make_move(self, col):
         """
@@ -40,6 +46,7 @@ class Board:
             self.boards[0] |= move_mask
             self.boards[self.player] |= move_mask
             self.move_history.append(col)
+            self.zobrist_key ^= ZOBRIST_HASH[self.player][col]
             self.player = 1 if self.player == 2 else 2
             return True
         return False
@@ -57,6 +64,7 @@ class Board:
                 # Remove the move from the occupied board and the player board.
                 self.boards[0] &= ~move_mask
                 self.boards[self.player] &= ~move_mask
+                self.zobrist_key ^= ZOBRIST_HASH[self.player][last_col]
                 return True
         return False
 
