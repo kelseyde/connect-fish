@@ -1,3 +1,4 @@
+from src.board import Board
 from src.game import play_game
 import src.train.generator as generator
 
