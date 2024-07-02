@@ -1,4 +1,5 @@
-from src.game import play_game, self_play
+from src.game import play_game
+import src.train.generator as generator
 
 print("🐟🐟🐟 Welcome to ConnectFish 🐟🐟🐟")
 
@@ -9,11 +10,8 @@ while running:
     match command:
         case "newgame":
             play_game()
-        case "selfplay":
-            print("Select mode: 'demo' or 'gendat'")
-            command = input()
-            assert(command in ['gendat', 'demo'], "Error: Unknown command")
-            self_play(command)
+        case "generate":
+            generator.generate_training_positions()
         case "quit":
             running = False
         case _:
