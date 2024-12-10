@@ -13,6 +13,9 @@ def generate_training_positions(
         think_time=0.025,
         positions_per_game=5,
         debug=False):
+    """
+    Generate training data by playing self-play games and saving the positions to a CSV file.
+    """
     with open(file_path, 'a') as file:
         game_count = 0
         position_count = 0
@@ -29,9 +32,12 @@ def generate_training_positions(
 
 
 def extract_positions(board, result, positions_per_game):
+    """
+    Extract 'positions_per_game' training positions from a game. The positions are selected randomly from the game
+    to ensure a variety of positions being included in training.
+    """
     training_positions = []
     start_board = Board()
-    # select 'positions_per_game' number of random moves from the game
     move_indices = range(0, len(board.move_history))
     random_indices = random.sample(move_indices, positions_per_game)
 
@@ -48,6 +54,9 @@ def extract_positions(board, result, positions_per_game):
 
 
 def save_positions(file, positions):
+    """
+    Convert the training positions to a comma-separated row and write them to the CSV file.
+    """
     writer = csv.writer(file)
     rows = [(p1, p2, stm, score) for p1, p2, stm, score in positions]
     writer.writerows(rows)
